@@ -1,10 +1,13 @@
 import React from 'react'
+import Header from './components/Header'
 
 const App = () => {
   return (
-    <div>
-      <h2>App</h2>
-    </div>
+    <main>
+      <div className='flex h-screen bg-[url(./citybackground.gif)] bg-cover bg-center justify-center'>
+        <Header/>
+      </div>
+    </main>
   )
 }
 
