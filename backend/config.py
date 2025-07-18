@@ -1,0 +1,1 @@
+# Contains the main configurations of our applications
