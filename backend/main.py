@@ -31,9 +31,9 @@ def create_task():
     if not task_name or not due_date: # We want to avoid adding empty task or due date items to the database and send an error
         return jsonify({"message": "You need a task name and a due date."}),400
 
-    new_task = Task(task_name=task_name, due_date=due_date)
+    new_task = Task(task_name=task_name, due_date=due_date) # Create a new instance of our task class from models.py
     try:
-        db.session.add(new_task)
+        db.session.add(new_task) # Think of this try block like git, we have to add our change first and then commit it to the database
         db.session.commit()
     except Exception as e:
         return jsonify({"message": str(e)})
@@ -42,6 +42,36 @@ def create_task():
         "taskName": new_task.task_name,
         "due_date": str(new_task.due_date)
         }), 201
+
+@app.route("/edit_task/<int:task_id>", methods=["PATCH"])
+def edit_task(task_id):
+    task = Task.query.get(task_id)
+    new_task_name = request.json.get("taskName")
+    if not new_task_name:
+        return jsonify({"message": "You need to enter a task name"}), 400
+    try:
+        new_task_date = datetime.strptime(request.json.get("dueDate"), "%m-%d-%Y").date()
+    except (ValueError, TypeError): # Instead of checking not due date like in create_task, i am also catching type errors to avoid null inputs
+        return jsonify({"message": "Due date does not match MM-DD-YYYY format."}), 400
+    task.task_name = new_task_name
+    task.due_date = new_task_date
+    try:
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message": str(e)})
+    return jsonify({"message": "Sucessfully edited task"}), 200
+@app.route("/delete_task/<int:task_id>", methods=["DELETE"]) # The <int:task_id> portion of the string will pass the task_id into our function as a parameter
+def delete_task(task_id):
+    task = Task.query.get(task_id)
+    task_name = task.task_name
+    if not task:
+        return jsonify({"message": "Cannot delete a task that doesn't exist."}), 400
+    try:
+        db.session.delete(task)
+        db.session.commit()
+    except Exception as e:
+        return jsonify("message", str(e))
+    return jsonify({"message": f"Successfully deleted {task_name} task"}), 200
 
 # This ensures the server only starts if this file is run directly, and not when it's imported into another file
 if __name__ == "__main__":
