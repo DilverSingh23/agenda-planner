@@ -1,33 +1,70 @@
 import { useEffect, useState } from 'react'
+import { FaPencil, FaCircleCheck } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
+import TaskForm from "./TaskForm"
 import './App.css'
 
 function App() {
   const [tasks, setTasks] = useState([])
-  const [refresh, setRefresh] = useState(false)
+  const [complete, setComplete] = useState({})
 
   const fetchTasks = async () => {
     const response = await fetch("http://127.0.0.1:5000/tasks")
     const data = await response.json()
-    setTasks(data.tasks)
-    console.log(data.tasks)
+    const sorted = data.tasks.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate))
+    setTasks(sorted)
+  }
+
+  const deleteTask = async (id) => {
+    const url = `http://127.0.0.1:5000/delete_task/${id}`
+    const options = {
+      method: "DELETE"
+    }
+    const response = await fetch(url, options)
+    const data = await response.json()
+    if (response.status != 200) {
+      alert(data.message)
+    }
+    else {
+      fetchTasks()
+    }
+  }
+
+  const handleComplete = (id) => {
+    setComplete((prev) => ({
+      ...prev,
+      [id]: !prev[id]
+    }))
   }
 
   useEffect(() => {
     fetchTasks()
-  }, [refresh])
-
+  }, [])
 
   return (
     <>
-      <section className="min-h-screen flex justify-center items-center bg-black text-white">
-        <div className='flex flex-col justify-center items-center bg-black border-2 border-violet-500 gap-5 p-6'>
+      <section className="min-h-screen flex items-center bg-black text-white flex-col gap-2 w-screen overflow-hidden">
+        <div className='flex items-center justify-center text-white gap-3 mt-20'>
+          <img className="w-[100px] h-[100px]" src="/logo.png" />
+          <span className='text-5xl'>|</span>
+          <h1 className='font-light text-3xl'>Agenda Planner</h1>
+        </div>
+        <div className='flex justify-between items-center bg-violet-300 p-5 w-fit rounded-3xl'>
+          <TaskForm fetchTasks={fetchTasks}/>
+        </div>
+        <div className='flex flex-col items-center bg-black rounded-2xl gap-5 p-6 pl-20 pr-20 w-[60em] h-[30em] scroll-smooth overflow-scroll'>
           {tasks.map((task) => (
-            <div key={task.id} className='w-300 h-200 text-white bg-violet-500 p-4 rounded-3xl flex gap-1'>
-              <div className='text-white font-extralight'>
-                {task.dueDate.slice(0,16) + "    |    "}
+            <div key={task.id} className=' text-white bg-violet-500 p-4 pl-6 pr-6 rounded-3xl flex gap-5 w-full items-center'>
+              <FaCircleCheck className={`h-[30px] w-[30px] ${complete[task.id] ? 'hover:text-green-300 text-green-500' : 'hover:text-green-400 text-white'} hover:cursor-pointer`} onClick={() => handleComplete(task.id)}/>
+              <div className='font-extralight bg-black w-[150px] flex items-center justify-center rounded-3xl p-2'>
+                {task.dueDate.slice(0,16)}
               </div>
-              <div className='text-white font-extrabold'>
+              <div className='font-extrabold flex justify-center items-center'>
                 {task.task_name}
+              </div>
+              <div className='text-white font-extralight flex gap-3 justify-center items-center ml-auto'>
+                <FaPencil className='hover:text-amber-300 hover:cursor-pointer' />
+                <MdDelete className='h-[20px] w-[20px] hover:text-red-500 hover:cursor-pointer' onClick={() => deleteTask(task.id)} />
               </div>
             </div>
           ))}
