@@ -39,7 +39,9 @@ function App() {
       ...prev,
       [id]: !prev[id]
     }))
-
+    const task = tasks.find((task) => task.id == id)
+    setTaskName(task.taskName)
+    setDueDate(new Date(task.dueDate).toISOString().slice(0,10).replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$2-$3-$1'))
   }
 
   const editTask = async(id) => {
@@ -97,11 +99,11 @@ function App() {
               <FaCircleCheck className={`h-[30px] w-[30px] ${complete[task.id] ? 'hover:text-green-300 text-green-500' : 'hover:text-green-400 text-white'} hover:cursor-pointer`} onClick={() => handleComplete(task.id)}/>
               { !editing[task.id] ? (
                 <>
-                  <div className='font-extralight bg-black w-[150px] flex items-center justify-center rounded-3xl p-2'>
-                    {task.dueDate.slice(0,16)}
+                  <div className='font-extralight bg-black w-[160px] flex items-center justify-center rounded-3xl p-2'>
+                    {task.dueDate.slice(0,16).replace(/^(\w{3}), (\d{2}) (\w{3}) (\d{4})$/, '$1, $3 $2, $4')}
                   </div>
                   <div className='font-extrabold flex justify-center items-center'>
-                    {task.task_name}
+                    {task.taskName}
                   </div>
                   <div className='text-white font-extralight flex gap-3 justify-center items-center ml-auto'>
                     <FaPencil className='hover:text-amber-300 hover:cursor-pointer' onClick={() => {
@@ -117,7 +119,7 @@ function App() {
                       type='text'
                       aria-rowcount={1}
                       className='flex bg-white rounded-2xl w-[150px] p-2 text-black border-2 border-black resize-none font-extralight justify-center'
-                      placeholder='Enter Due Date'
+                      placeholder='Enter due date'
                       value={dueDate}
                       onChange={(e) => setDueDate(e.target.value)}
                     />
@@ -127,7 +129,7 @@ function App() {
                       type='text'
                       aria-rowcount={1}
                       className='flex bg-white rounded-2xl p-2 w-[400px] text-black border-2 border-black resize-none font-extralight justify-center'
-                      placeholder='Enter Task Name'
+                      placeholder='Enter task'
                       value={taskName}
                       onChange={(e) => setTaskName(e.target.value)}
                     />

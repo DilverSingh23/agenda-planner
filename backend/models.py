@@ -12,7 +12,7 @@ class Task(db.Model):
         return {
             "id": self.id,
             "dueDate": self.due_date,
-            "task_name": self.task_name
+            "taskName": self.task_name
         }
 
 

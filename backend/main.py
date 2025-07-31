@@ -23,10 +23,15 @@ def get_tasks():
 def create_task():
     task_name = request.json.get("taskName") # Access the taskName from the json sent from the frontend with the user inputs
     # We put this in a try except block because the user may enter an invalid due date and we need to catch the error so we can return that to the frontend as our reason for the issue
-    try:
-        due_date = datetime.strptime(request.json.get("dueDate"), "%m-%d-%Y").date() # Our due date is a Date type so if the string we get is not in the fromat we need for conversion we return that error to the frontend
-    except ValueError:
-        return jsonify({"message": "Due date does not match MM-DD-YYYY format."}), 400
+    formats = ["%m-%d-%Y", "%m-%d-%y", "%m/%d/%Y", "%m/%d/%y"] # Allow for different date format submissions
+    for format in formats:
+        try:
+            due_date = datetime.strptime(request.json.get("dueDate"), format).date() # Our due date is a Date type so if the string we get is not in the fromat we need for conversion we return that error to the frontend
+            break
+        except ValueError:
+            continue
+    else:
+        return jsonify({"message": "Due date is not in a valid date format."}), 400
 
     if not task_name or not due_date: # We want to avoid adding empty task or due date items to the database and send an error
         return jsonify({"message": "You need a task name and a due date."}),400
