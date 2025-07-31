@@ -43,7 +43,7 @@ def create_task():
         "due_date": str(new_task.due_date)
         }), 201
 
-@app.route("/update_taskq/<int:task_id>", methods=["PATCH"])
+@app.route("/update_task/<int:task_id>", methods=["PATCH"])
 def update_task(task_id):
     task = Task.query.get(task_id)
     new_task_name = request.json.get("taskName")
