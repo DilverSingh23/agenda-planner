@@ -4,6 +4,7 @@ import { MdDelete, MdOutlineCancel } from "react-icons/md";
 import { LuSendHorizontal } from "react-icons/lu";
 import TaskForm from "./TaskForm"
 import './App.css'
+import EditForm from './EditForm';
 
 function App() {
   const [tasks, setTasks] = useState([])
@@ -114,26 +115,8 @@ function App() {
                 </>
               ): (
                 <>
-                  <div className='font-extralight flex items-center justify-center'>
-                    <input
-                      type='text'
-                      aria-rowcount={1}
-                      className='flex bg-white rounded-2xl w-[150px] p-2 text-black border-2 border-black resize-none font-extralight justify-center'
-                      placeholder='Enter due date'
-                      value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
-                    />
-                  </div>
-                  <div className='font-extrabold flex justify-center items-center'>
-                    <input
-                      type='text'
-                      aria-rowcount={1}
-                      className='flex bg-white rounded-2xl p-2 w-[400px] text-black border-2 border-black resize-none font-extralight justify-center'
-                      placeholder='Enter task'
-                      value={taskName}
-                      onChange={(e) => setTaskName(e.target.value)}
-                    />
-                  </div>
+                  <EditForm setName={dueDate} setFunction={setDueDate} width={150} />
+                  <EditForm setName={taskName} setFunction={setTaskName} width={400} />
                   <div className='text-white font-extralight flex gap-3 justify-center items-center ml-auto'>
                     <button type="submit" onClick={() => editTask(task.id)}>
                         <LuSendHorizontal className='w-fit h-fit rounded-2xl p-3 bg-black ml-3 hover:bg-white hover:text-black hover:cursor-pointer'/>
