@@ -89,7 +89,7 @@ function App() {
         <div className='flex items-center justify-center text-white gap-3 mt-20'>
           <img className="w-[100px] h-[100px]" src="/logo.png" />
           <span className='text-5xl'>|</span>
-          <h1 className='font-light text-3xl'>Agenda Planner</h1>
+          <h1 className='font-light text-3xl'>TaskPilot</h1>
         </div>
         <div className='flex justify-between items-center bg-violet-300 p-5 w-fit rounded-3xl'>
           <TaskForm fetchTasks={fetchTasks}/>
