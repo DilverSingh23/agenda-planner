@@ -1,4 +1,4 @@
-# 🗓️ Agenda Planner
+# 🗓️ TaskPilot
 
 A full-stack CRUD agenda/task planning app built with **React.js**, **Flask** (RESTful API), **SQLite** database, and **Tailwind CSS**.
 
