@@ -2,7 +2,7 @@
 
 A full-stack CRUD agenda/task planning app built with **React.js**, **Flask** (RESTful API), **SQLite** database, and **Tailwind CSS**.
 
-<img width="1512" height="862" alt="Screenshot 2025-07-31 at 8 05 34 PM" src="https://github.com/user-attachments/assets/5310ecb9-9916-4d4a-b49c-2e70a7f31413" />
+<img width="1512" height="859" alt="Screenshot 2025-07-31 at 8 32 34 PM" src="https://github.com/user-attachments/assets/e6be5c55-0fb5-4628-a37e-72b47a8faf31" />
 
 
 ---
